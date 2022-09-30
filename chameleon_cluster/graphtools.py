@@ -46,9 +46,12 @@ def part_graph(graph, k, df=None):
 
 
 def pre_part_graph(graph, k, df=None, verbose=False):
+    '''k is the num of clusters the graph will be partitioned by, using the hMetis algorithm 
+    (referenced though not explained in the original paper)'''
     if verbose:
         print("Begin clustering...")
     clusters = 0
+    # all nodes initialized for being in cluster 0
     for i, p in enumerate(graph.nodes()):
         graph.nodes[p]['cluster'] = 0
     cnts = {}
@@ -63,6 +66,7 @@ def pre_part_graph(graph, k, df=None, verbose=False):
                 maxc = key
         s_nodes = [n for n in graph.nodes if graph.nodes[n]['cluster'] == maxc]
         s_graph = graph.subgraph(s_nodes)
+        # divides each graph into two partitions minimizing edge-cut using metis
         edgecuts, parts = metis.part_graph(
             s_graph, 2, objtype='cut', ufactor=250)
         new_part_cnt = 0
