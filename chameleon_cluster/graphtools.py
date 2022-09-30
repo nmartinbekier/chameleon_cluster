@@ -11,6 +11,7 @@ def euclidean_distance(a, b):
 
 
 def knn_graph(df, k, verbose=False):
+    # column 0 has no useful info, start by 1:
     points = [p[1:] for p in df.itertuples()]
     g = nx.Graph()
     for i in range(0, len(points)):
@@ -24,6 +25,8 @@ def knn_graph(df, k, verbose=False):
         closests = np.argsort(distances)[1:k+1]  # second trough kth closest
         # print(distances[0])
         for c in closests:
+            # weight inversely proportional to distance
+            # similarity adjusted to be an integer also inversely prop. to distance
             g.add_edge(i, c, weight=1.0 / distances[c], similarity=int(
                 1.0 / distances[c] * 1e4))
         g.nodes[i]['pos'] = p
