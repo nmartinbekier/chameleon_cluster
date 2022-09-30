@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
 from tqdm import tqdm
+from visualization import *
 
 import metis
 
