@@ -47,7 +47,7 @@ def part_graph(graph, k, df=None):
 
 def pre_part_graph(graph, k, df=None, verbose=False):
     '''k is the num of clusters the graph will be partitioned by, using the hMetis algorithm 
-    (referenced though not explained in the original paper)'''
+    (referenced in the original paper)'''
     if verbose:
         print("Begin clustering...")
     clusters = 0
@@ -100,6 +100,7 @@ def connecting_edges(partitions, graph):
 
 
 def min_cut_bisector(graph):
+    '''Returns connecting edges of the graph's bisection'''
     graph = graph.copy()
     graph = part_graph(graph, 2)
     partitions = get_cluster(graph, [0]), get_cluster(graph, [1])
@@ -107,6 +108,7 @@ def min_cut_bisector(graph):
 
 
 def get_weights(graph, edges):
+    # Edge weight (from node edge[0] to node edge[1])
     return [graph[edge[0]][edge[1]]['weight'] for edge in edges]
 
 

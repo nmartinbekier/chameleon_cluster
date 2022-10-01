@@ -4,18 +4,23 @@ import pandas as pd
 
 
 def internal_interconnectivity(graph, cluster):
+    # Interconnectivity in terms of Edge Cut (sum of weights from connecting edges)
+    # of a bisection of the graph (bisected using metis)
     return np.sum(bisection_weights(graph, cluster))
 
 
 def relative_interconnectivity(graph, cluster_i, cluster_j):
     edges = connecting_edges((cluster_i, cluster_j), graph)
-    EC = np.sum(get_weights(graph, edges))
+    # Interconnectivity in terms of Edge Cut (sum of weights from connecting edges)
+    EC = np.sum(get_weights(graph, edges)) 
     ECci, ECcj = internal_interconnectivity(
         graph, cluster_i), internal_interconnectivity(graph, cluster_j)
+    # EC normalized by the EC of cluster i and j
     return EC / ((ECci + ECcj) / 2.0)
 
 
 def internal_closeness(graph, cluster):
+    # Simple sum of the weights of the cluster
     cluster = graph.subgraph(cluster)
     edges = cluster.edges()
     weights = get_weights(cluster, edges)
@@ -27,9 +32,14 @@ def relative_closeness(graph, cluster_i, cluster_j):
     if not edges:
         return 0.0
     else:
+        # Avg weight of connecting edges
         SEC = np.mean(get_weights(graph, edges))
+    # Sum of weights within the clusters
+    # In the paper, they use |C_i| and |C_j|, which represent the number
+    # of data points of the clusters
     Ci, Cj = internal_closeness(
         graph, cluster_i), internal_closeness(graph, cluster_j)
+    # Avg weight of the connecting edges of the bisection of ci and cj
     SECci, SECcj = np.mean(bisection_weights(graph, cluster_i)), np.mean(
         bisection_weights(graph, cluster_j))
     return SEC / ((Ci / (Ci + Cj) * SECci) + (Cj / (Ci + Cj) * SECcj))
