@@ -57,19 +57,29 @@ def merge_best(graph, df, a, k, verbose=False):
     if len(clusters) <= k:
         return False
 
+    if verbose:
+        curr_i_value = -1
     for combination in itertools.combinations(clusters, 2):
         i, j = combination
         if i != j:
             if verbose:
-                print("Checking c%d c%d" % (i, j))
+                if (curr_i_value==-1 or curr_i_value != i):
+                    print("Checking c%d with..." % i)
+                    j_values = []
+                j_values.append(f" c{j}")
+                curr_i_value = i
             gi = get_cluster(graph, [i])
             gj = get_cluster(graph, [j])
             edges = connecting_edges(
                 (gi, gj), graph)
+            
             if not edges:
                 continue
+            
             ms = merge_score(graph, gi, gj, a)
             if verbose:
+                print(j_values)
+                print(f"Found connecting edges between c{i} and c{j}")
                 print("Merge score: %f" % (ms))
             if ms > max_score:
                 if verbose:
