@@ -33,15 +33,24 @@ def relative_closeness(graph, cluster_i, cluster_j):
         return 0.0
     else:
         # Avg weight of connecting edges
-        SEC = np.mean(get_weights(graph, edges))
+        try:
+            SEC = np.mean(get_weights(graph, edges))
+        except Exception as e:
+            print("SEC error", e.message, e.args)
     # Sum of weights within the clusters
     # In the paper, they use |C_i| and |C_j|, which represent the number
     # of data points of the clusters
     Ci, Cj = internal_closeness(
         graph, cluster_i), internal_closeness(graph, cluster_j)
     # Avg weight of the connecting edges of the bisection of ci and cj
-    SECci, SECcj = np.mean(bisection_weights(graph, cluster_i)), np.mean(
-        bisection_weights(graph, cluster_j))
+    try:
+        SECci = np.mean(bisection_weights(graph, cluster_i))
+    except Exception as e:
+            print("SECci error", e.message, e.args)
+    try:
+        SECcj = np.mean(bisection_weights(graph, cluster_j))
+    except Exception as e:
+            print("SECcj error", e.message, e.args)
     return SEC / ((Ci / (Ci + Cj) * SECci) + (Cj / (Ci + Cj) * SECcj))
 
 
