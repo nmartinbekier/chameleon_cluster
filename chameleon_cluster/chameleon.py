@@ -107,7 +107,7 @@ def cluster(df, k, knn=10, m=30, alpha=2.0, verbose=False, plot=False):
     for i in iterm:
         merge_best(graph, df, alpha, k, verbose)
         if plot:
-            plot2d_data(df)
+            plot2d_data_preview(df)
     res = rebuild_labels(df)
     return res
 
