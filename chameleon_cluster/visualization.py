@@ -27,12 +27,29 @@ def plot2d_data(df):
     
     clusters = sorted(df['cluster'].unique())
     markers = ["d", "v", "s", "*", "^", "d", "v", "s", "*", "^"]
-    colors = ['red', 'gold', 'slateblue', 'green', 'hotpink', 'sienna', 'skyblue',
+    colors = ['red', 'slateblue', 'green', 'hotpink', 'sienna', 'skyblue',
              'darkorange', 'turquoise', 'violet', 'greenyellow', 'steelblue', 'teal', 'lime']
     
     for i in range(len(clusters)+1):
-        df_i = df.loc[(df['cluster']==i)]
-        plt.scatter(df_i.iloc[:,0], df_i.iloc[:,1], marker=markers[i%len(markers)], 
-                    s=7, c=colors[i%len(colors)])
+        df_i = df.loc[(df['cluster']==i+1)]
+        #plt.scatter(df_i.iloc[:,0], df_i.iloc[:,1], marker=markers[i%len(markers)], 
+        #            s=7, c=colors[i%len(colors)])
+        plt.scatter(df_i.iloc[:,0], df_i.iloc[:,1], c=colors[i%len(colors)])
+
+    plt.show(block=False)
+    
+def plot2d_data_sl(df):
+    '''Colors to use with comparison using scikit-learn datasets'''
+    if (len(df.columns) > 3):
+        print("Plot Waring: more than 2-Dimensions!")
+    
+    clusters = sorted(df['cluster'].unique())
+    #markers = ["d", "v", "s", "*", "^", "d", "v", "s", "*", "^"]
+    colors = ["#377eb8", "#ff7f00", "#4daf4a", "#f781bf", "#a65628", "#984ea3",
+              "#999999","#e41a1c","#dede00"]
+    
+    for i in range(len(clusters)+1):
+        df_i = df.loc[(df['cluster']==i+1)]
+        plt.scatter(df_i.iloc[:,0], df_i.iloc[:,1], s=7, c=colors[i%len(colors)])
 
     plt.show(block=False)
