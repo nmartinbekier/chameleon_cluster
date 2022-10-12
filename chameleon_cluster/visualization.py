@@ -50,6 +50,6 @@ def plot2d_data_sl(df):
     
     for i in range(len(clusters)+1):
         df_i = df.loc[(df['cluster']==i+1)]
-        plt.scatter(df_i.iloc[:,0], df_i.iloc[:,1], s=7, c=colors[i%len(colors)])
+        plt.scatter(df_i.iloc[:,0], df_i.iloc[:,1], c=colors[i%len(colors)])
 
     plt.show(block=False)
