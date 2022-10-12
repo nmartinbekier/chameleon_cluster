@@ -45,12 +45,9 @@ def relative_closeness(graph, cluster_i, cluster_j):
     # Avg weight of the connecting edges of the bisection of ci and cj
     try:
         SECci = np.mean(bisection_weights(graph, cluster_i))
-    except Exception as e:
-            print("SECci error", e.message, e.args)
-    try:
         SECcj = np.mean(bisection_weights(graph, cluster_j))
     except Exception as e:
-            print("SECcj error", e.message, e.args)
+            print("SEC error", e.message, e.args)
     return SEC / ((Ci / (Ci + Cj) * SECci) + (Cj / (Ci + Cj) * SECcj))
 
 
