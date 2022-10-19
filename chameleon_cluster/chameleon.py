@@ -57,7 +57,9 @@ def merge_score(g, ci, cj, a):
 
 
 def merge_best(graph, df, a, k, verbose=False):
+    '''Adjusted to return a list with the mergescores'''
     clusters = np.unique(df['cluster'])
+    merge_scores = []
     max_score = 0
     ci, cj = -1, -1
     if len(clusters) <= k:
@@ -83,6 +85,7 @@ def merge_best(graph, df, a, k, verbose=False):
                 continue
             
             ms = merge_score(graph, gi, gj, a)
+            merge_scores.append(ms)
             if verbose:
                 j_values.append("...")
                 print(*j_values, sep = ", ")
@@ -103,19 +106,23 @@ def merge_best(graph, df, a, k, verbose=False):
         for i, p in enumerate(graph.nodes()):
             if graph.nodes[p]['cluster'] == cj:
                 graph.nodes[p]['cluster'] = ci
-    return max_score > 0
+    return merge_scores
 
 
 def cluster(df, k, knn=10, m=30, alpha=2.0, verbose=False, plot=False):
+    '''Added a record_merge_scores to keep track of this value from all
+    iterations, and to also return this'''
+    record_merge_scores = []
     graph = knn_graph(df, knn, verbose=True)
     graph = pre_part_graph(graph, m, df, verbose=True)
     iterm = tqdm(enumerate(range(m - k)), total=m-k)
     for i in iterm:
-        merge_best(graph, df, alpha, k, verbose)
+        current_merge_scores = merge_best(graph, df, alpha, k, verbose)
+        record_merge_scores.append(current_merge_scores)
         if plot:
             plot2d_data_preview(df)
     res = rebuild_labels(df)
-    return res
+    return res, record_merge_scores
 
 def rebuild_labels(df):
     ans = df.copy()
