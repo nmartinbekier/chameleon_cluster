@@ -118,7 +118,7 @@ def cluster(df, k, knn=10, m=30, alpha=2.0, verbose=False, plot=False):
     iterm = tqdm(enumerate(range(m - k)), total=m-k)
     for i in iterm:
         current_merge_scores = merge_best(graph, df, alpha, k, verbose)
-        record_merge_scores.append(current_merge_scores)
+        record_merge_scores.append(sorted(current_merge_scores, reverse=True))
         if plot:
             plot2d_data_preview(df)
     res = rebuild_labels(df)
